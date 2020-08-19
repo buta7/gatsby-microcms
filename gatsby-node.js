@@ -18,16 +18,11 @@ exports.createPages = async ({ graphql, actions }) => {
            node {
              id
              title
-             title_origin
              category {
                 id
                 name
              }
              body
-             feature
-             pict {
-                 url
-             }
            }
          }
        }
@@ -44,10 +39,10 @@ exports.createPages = async ({ graphql, actions }) => {
      const categoryName = edge.node.category[0].name
      switch (categoryName) {
          case '出荷者':  // categoryがpatientsだったらサブパスをpatientsに
-             subDir = '/grower/'+ edge.node.id
+             subDir = '/growers/'+ edge.node.id
              break;
          case '買受人':  // categoryがdoctorsだったらサブパスをdoctorsに
-             subDir = '/buyer/'+edge.node.id
+             subDir = '/buyers/'+edge.node.id
              break;
          default:
              subDir = '/articles/'+edge.node.id
