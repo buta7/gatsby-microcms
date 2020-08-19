@@ -5,3 +5,63 @@
  */
 
 // You can delete this file if you're not using it
+const path = require("path")
+
+exports.createPages = async ({ graphql, actions }) => {
+ const { createPage } = actions
+
+ const result = await graphql(
+   `
+     {
+        allMicrocmsArticles {
+         edges {
+           node {
+             id
+             title
+             title_origin
+             category {
+                id
+                name
+             }
+             body
+             feature
+             pict {
+                 url
+             }
+           }
+         }
+       }
+     }
+   `
+ )
+
+ if (result.errors) {
+   throw result.errors
+ }
+
+ result.data.allMicrocmsArticles.edges.forEach(edge => {
+     //上記のGraphQLでcategoryを書いてないがnode.categoryを掴めるようだ
+     const categoryName = edge.node.category[0].name
+     switch (categoryName) {
+         case '出荷者':  // categoryがpatientsだったらサブパスをpatientsに
+             subDir = '/grower/'+ edge.node.id
+             break;
+         case '買受人':  // categoryがdoctorsだったらサブパスをdoctorsに
+             subDir = '/buyer/'+edge.node.id
+             break;
+         default:
+             subDir = '/articles/'+edge.node.id
+     }
+   createPage({
+     //path: `/patients/${edge.node.id}`,
+     path: `${subDir}`,
+     component: path.resolve(
+       "./src/templates/article.js"
+     ),
+     context: {
+       id: edge.node.id,
+     },
+   })
+
+ })
+}
