@@ -34,7 +34,7 @@ module.exports = {
       resolve: "gatsby-source-microcms",
       options: {
         apiKey: "5ddfd723-23cb-4537-82fd-3047fd76e893",
-        serviceId: "hige-gatsby",
+        serviceId: "buta7-gatsby",
         endpoint: "articles",
       },
     },
